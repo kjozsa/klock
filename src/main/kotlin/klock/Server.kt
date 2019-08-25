@@ -1,27 +1,29 @@
 package klock
 
 import io.javalin.Javalin
-import io.javalin.websocket.WsSession
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import io.javalin.websocket.WsContext
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 class Server {
-    private val websockets = mutableListOf<WsSession>()
+    private val websockets = mutableListOf<WsContext>()
 
     fun start() {
-        Javalin.create().apply {
-            ws("/websocket") { ws ->
-                ws.onConnect { session ->
-                    websockets.add(session)
+        Javalin
+            .create { config ->
+                config.addStaticFiles("/web")
+            }
+            .ws("/websocket") { ws ->
+                ws.onConnect { ctx ->
+                    websockets.add(ctx)
                 }
-                ws.onClose { session, _, _ ->
-                    websockets.remove(session)
+                ws.onClose { ctx ->
+                    websockets.remove(ctx)
                 }
             }
-            enableStaticFiles("/web")
-        }.start()
+            .start(7000)
 
         GlobalScope.launch { tick() }
     }
