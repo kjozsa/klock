@@ -27,7 +27,7 @@ class Server {
             }
             .start(7000)
 
-        app.get("/", VueComponent("<hello-world></hello-world>"))
+        app.get("/", VueComponent("<klock></klock>"))
 
         GlobalScope.launch { tick() }
     }
