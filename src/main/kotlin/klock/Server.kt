@@ -1,6 +1,7 @@
 package klock
 
 import io.javalin.Javalin
+import io.javalin.plugin.rendering.vue.VueComponent
 import io.javalin.websocket.WsContext
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -11,9 +12,10 @@ class Server {
     private val websockets = mutableListOf<WsContext>()
 
     fun start() {
-        Javalin
+        val app = Javalin
             .create { config ->
                 config.addStaticFiles("/web")
+                config.enableWebjars()
             }
             .ws("/websocket") { ws ->
                 ws.onConnect { ctx ->
@@ -24,6 +26,8 @@ class Server {
                 }
             }
             .start(7000)
+
+        app.get("/", VueComponent("<hello-world></hello-world>"))
 
         GlobalScope.launch { tick() }
     }

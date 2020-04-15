@@ -13,32 +13,12 @@
     <link href="cover.css" rel="stylesheet">
 </head>
 <body class="text-center">
-<main id="main-vue" v-cloak>
+<main id="main-vue" v-cloak style="width: 100%">
     @routeComponent
 </main>
 <script>
     new Vue({el: "#main-vue"});
-    Vue.component("hello-world", {template: "#hello-world"});
-
 </script>
-
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="masthead mb-auto"></header>
-
-    <main role="main" class="inner cover">
-        <h1 class="cover-heading">Kotlin + Websocket<br> example</h1>
-        <br>
-        <p class="lead">
-            <span href="#" class="btn btn-lg btn-secondary" id="currentTime">Loading..</span>
-        </p>
-    </main>
-
-    <footer class="mastfoot mt-auto">
-        <div class="inner">
-            <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-        </div>
-    </footer>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
