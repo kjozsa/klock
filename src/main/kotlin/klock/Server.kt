@@ -1,33 +1,39 @@
 package klock
 
 import io.javalin.Javalin
+import io.javalin.plugin.rendering.vue.JavalinVue
 import io.javalin.plugin.rendering.vue.VueComponent
 import io.javalin.websocket.WsContext
+import io.javalin.plugin.rendering.vue.VueVersion
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
 class Server {
     private val websockets = mutableListOf<WsContext>()
+    val logger = LoggerFactory.getLogger(this.javaClass)
 
     fun start() {
-        val app = Javalin
-            .create { config ->
-                config.addStaticFiles("/web")
-                config.enableWebjars()
+        val app = Javalin.create { config ->
+            config.addStaticFiles("/web")
+            config.enableWebjars()
+        }.ws("/websocket") { ws ->
+            ws.onConnect {
+                logger.info("connected ${it.session.remoteAddress}")
+                websockets.add(it)
             }
-            .ws("/websocket") { ws ->
-                ws.onConnect { ctx ->
-                    websockets.add(ctx)
-                }
-                ws.onClose { ctx ->
-                    websockets.remove(ctx)
-                }
+            ws.onClose {
+                websockets.remove(it)
             }
-            .start(7000)
+        }.start(7000)
 
-        app.get("/", VueComponent("<klock></klock>"))
+        JavalinVue.vueVersion = VueVersion.VUE_3
+        JavalinVue.vueAppName("app")
+
+        app.get("/", VueComponent("klock"))
 
         GlobalScope.launch { tick() }
     }
@@ -42,6 +48,6 @@ class Server {
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     Server().start()
 }

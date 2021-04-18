@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <script src="/webjars/vue/2.6.11/dist/vue.min.js"></script>
+    <script src="/webjars/vue/3.0.11/dist/vue.global.js"></script>
+    <script>
+        const app = Vue.createApp({});
+    </script>
     @componentRegistration
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -16,7 +19,7 @@
     @routeComponent
 </main>
 <script>
-    new Vue({el: "#main-vue"});
+    app.mount("#main-vue");
 </script>
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

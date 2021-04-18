@@ -18,7 +18,7 @@
     </div>
 </template>
 <script>
-    Vue.component("klock", {template: "#klock"});
+    app.component("klock", {template: "#klock"});
 
     let id = id => document.getElementById(id);
     let ws = new WebSocket("ws://" + location.hostname + ":" + location.port + "/websocket");
